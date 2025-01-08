@@ -15,31 +15,47 @@ public:
 	ACPlayer();
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category=Input)
+	virtual void BeginPlay() override;
+
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void Sprint(const FInputActionValue& Value);
+	void Jump(const FInputActionValue& Value);
+
+public:
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+protected:
+
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+	class UCameraComponent* CameraComp;
+
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+	class USpringArmComponent* SpringArmComp;
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	class UInputMappingContext* PlayerMappingContext;
 
-	UPROPERTY(EditDefaultsOnly, Category=Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	class UInputAction* MoveAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
 	class UInputAction* LookAction;
 
-	UPROPERTY(VisibleAnywhere, Category=Camera)
-	class UCameraComponent* CameraComp;
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	class UInputAction* SprintAction;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-	class USpringArmComponent* SpringArmComp;
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	class UInputAction* JumpAction;
 
-protected:
-	virtual void BeginPlay() override;
-	
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
+private:
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+	float SprintSpeed = 600.f;
 
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+	float WalkSpeed = 400.f;
 
-public:	
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

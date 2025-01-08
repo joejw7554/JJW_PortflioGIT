@@ -4,6 +4,7 @@
 
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KismetAnimationLibrary.h"
 
 
 void UCPlayerAnimInstance::NativeBeginPlay()
@@ -21,10 +22,33 @@ void UCPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (!!OwnerCharacter)
 	{
-		FVector Velocity = OwnerCharacter->GetVelocity();
-		Velocity.Z = 0;
-		Speed = Velocity.Size();
+		CalculateSpeed();
+		CalculateDirection();
+		CheckGround();
 	}
 
 
+}
+
+void UCPlayerAnimInstance::CalculateSpeed()
+{
+	FVector Velocity = OwnerCharacter->GetVelocity();
+	Velocity.Z = 0;
+	Speed = Velocity.Size();
+}
+
+void UCPlayerAnimInstance::CalculateDirection()
+{
+	FVector CurrentDirection = OwnerCharacter->GetVelocity();
+	FRotator Rotation = OwnerCharacter->GetActorRotation();
+	Direction= UKismetAnimationLibrary::CalculateDirection(CurrentDirection, Rotation);
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("%f"), Direction));
+}
+
+void UCPlayerAnimInstance::CheckGround()
+{
+	if (!!OwnerCharacter)
+	{
+		bFalling = OwnerCharacter	->GetCharacterMovement()->IsFalling();
+	}
 }

@@ -14,12 +14,22 @@ public:
 
 	void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	void CalculateSpeed();
+	void CalculateDirection();
+	void CheckGround();
+
 protected:
-	UPROPERTY(EditDefaultsOnly, Category=Movement)
+	UPROPERTY(BlueprintReadOnly, Category=Movement)
 	float Speed;
+
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
+	float Direction;
 
 	UPROPERTY(EditDefaultsOnly, Category=Owner)
 	class ACPlayer* OwnerCharacter;
+
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
+	bool bFalling=false;
 
 	
 	
